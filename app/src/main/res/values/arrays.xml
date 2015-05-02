@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="gender_arrays">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="language_arrays">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>Finish</item>
+    </string-array>
+
+    <string-array name="Role_arrays">
+        <item>Patient</item>
+        <item>Doctor</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="doctors">
+        <item>Oncology</item>
+        <item>Neurology</item>
+        <item>Internal Medicine</item>
+        <item>Other</item>
+    </string-array>
+
+</resources>

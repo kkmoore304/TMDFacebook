@@ -1,0 +1,243 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/new_monitor_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:gravity="center_vertical"
+                    android:id="@+id/face"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_action_face_unlock" />
+
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:orientation="vertical"
+                    android:id="@+id/next">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30sp"
+                        android:textColor="@color/primary_text_icons"
+                        android:fontFamily="sans-serif-light"
+                        android:text="JOHN" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:textColor="@color/primary_text_icons"
+                        android:fontFamily="sans-serif-light"
+                        android:text="BORWN" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:id="@+id/boxme">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:inputType="textNoSuggestions|textCapWords"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="First Name"
+                    android:id="@+id/fname" />
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:inputType="textNoSuggestions|textCapWords"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="Last Name"
+                    android:id="@+id/lnmae" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:id="@+id/email" />
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:inputType="textPassword"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:id="@+id/pword" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:inputType="phone"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="Phone"
+                    android:id="@+id/phone" />
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:layout_margin="4sp"
+                    android:layout_height="wrap_content"
+                    android:hint="Date or Birth"
+                    android:id="@+id/dob" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/primaryDarkColor_700"
+                    android:layout_height="wrap_content"
+                    android:text="Gender:" />
+
+                <Spinner
+                    android:padding="4dp"
+                    android:textSize="20sp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/gender_arrays"
+                    android:prompt="@string/gender_prompt"
+                    android:hint="Gender"
+                    android:id="@+id/gender_spinner"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/primaryDarkColor_700"
+                    android:layout_height="wrap_content"
+                    android:text="Language:" />
+
+                <Spinner
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/language_arrays"
+                    android:prompt="@string/language_prompt"
+                    android:hint="Language"
+                    android:id="@+id/lang_spinner"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/primaryDarkColor_700"
+                    android:layout_height="wrap_content"
+                    android:text="Role:" />
+
+                <Spinner
+                    android:textSize="20sp"
+                    android:entries="@array/Role_arrays"
+                    android:prompt="@string/Role_prompt"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/role_spinner"
+                    android:spinnerMode="dropdown"
+                    android:hint="Role" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:gravity="end"
+        android:id="@+id/fab_profile"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/oval_ripple_primary"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:fontFamily="sans-serif-light"
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/ic_action_done"
+        android:text="+"
+        android:textColor="@color/primary_text_icons"
+        android:textSize="20sp"
+        android:layout_gravity="bottom|right"
+        android:tint="@color/primary_text_icons"
+        android:transitionName="MyTransition" />
+
+
+</LinearLayout>
+

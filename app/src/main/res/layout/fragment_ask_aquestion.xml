@@ -1,0 +1,114 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tellmedoctor.tmdfacebook.ui.fragments.AskAQuestionFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="107dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:text="New Question" />
+
+            <TextView
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-light"
+                android:text="Please enter a new question for the doctor. Remember to choose a the Doctos' specificaly if you know it. You can Add images or vide to your question." />
+            <!-- TODO: Update blank fragment layout -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:textSize="18sp"
+                android:text="Doctor's Specialty :"
+                android:id="@+id/qwert" />
+
+            <Spinner
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:entries="@array/doctors"
+                android:prompt="@string/doctorslbl"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/role_spinner"
+                android:spinnerMode="dropdown"
+                android:hint="Specialty" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row3"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="18sp"
+            android:text="Question"
+            android:id="@+id/qwert2" />
+
+
+        <EditText
+            android:id="@+id/newquestion"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Enter your question here"
+            android:maxLines="10"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:gravity="end"
+        android:id="@+id/fab_newquestion"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/oval_ripple_primary"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:fontFamily="sans-serif-light"
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/ic_action_done"
+        android:text="+"
+        android:textColor="@color/primary_text_icons"
+        android:textSize="20sp"
+        android:layout_gravity="bottom|right"
+        android:tint="@color/primary_text_icons"
+        android:transitionName="MyTransition" />
+</FrameLayout>

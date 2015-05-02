@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".HomeActivity">
+
+    <!-- We want each fragment to handle its own help request
+    from the menu. This will allow us to control the what we
+    show as help-->
+    <!--<item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_help" />-->
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/action_about" />
+    <item
+        android:id="@+id/action_contact"
+        android:orderInCategory="102"
+        android:showAsAction="never"
+        android:title="@string/action_contact" />
+</menu>
