@@ -5,10 +5,10 @@ TMDFaceBook
 
 ![TMDFaceBoos](http://stream1.gifsoup.com/view4/1812355/70s-show-doctor-o.gif)
 
-TellMeDoctor is brought to you by Team People With Computers.
+TellMeDoctor is brought to you by Kevin Moore.
 
 
-People With Computers
+The Team
 ---------------------
 
 **ME** is:
