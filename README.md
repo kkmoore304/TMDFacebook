@@ -11,12 +11,13 @@ TellMeDoctor is brought to you by Team People With Computers.
 People With Computers
 ---------------------
 
-**People With Computers** is:
+**ME** is:
 
 - [**Kevin Moore**](https://twitter.com/kmoore812) <kmoore@nubesystems.com>
 
 
 **technologies Used**:
+
 The application uses the following Technology Stack
 Android
 Angular Js
