@@ -1,7 +1,22 @@
-# TMDFacebook
-TMD Allows Users to Interact interface and Interact Medical Doctors
+TMDFaceBook
+===============
 
-Technologies used:
+**TMDFaceBook** is an Android application that allows user to interface and interface with the medical community.
+
+![TMDFaceBoos](http://stream1.gifsoup.com/view4/1812355/70s-show-doctor-o.gif)
+
+TellMeDoctor is brought to you by Team People With Computers.
+
+
+People With Computers
+---------------------
+
+**People With Computers** is:
+
+- [**Kevin Moore**](https://twitter.com/kmoore812) <kmoore@nubesystems.com>
+
+
+**technologies Used**:
 The application uses the following Technology Stack
 Android
 Angular Js
@@ -9,11 +24,4 @@ Google Cloudservices
 Facebook Messenger Api
 Facebook Login.
 
-Team member names:
-Kevin Moore
 
-Team member e-mail addresses:
-kmoore@nubesystems.com
-
-Team member Twitter URLs (or URLs for other Internet profiles)
-https://twitter.com/kmoore812
