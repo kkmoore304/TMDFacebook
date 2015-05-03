@@ -2,12 +2,24 @@ package com.tellmedoctor.tmdfacebook.ui.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import com.tellmedoctor.tmdfacebook.R;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -29,6 +41,9 @@ public class ProfilesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private View rootView;
+    private TextView name;
+    private TextView email;
 
     /**
      * Use this factory method to create a new instance of
@@ -65,7 +80,13 @@ public class ProfilesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profiles, container, false);
+
+        rootView = inflater.inflate(R.layout.fragment_profiles, container, false);
+name= (TextView) rootView.findViewById(R.id.name);
+        email= (TextView) rootView.findViewById(R.id.email);
+        ImageView userpicture = (ImageView) rootView.findViewById(R.id.image);
+        RetrieveImageTask task = new RetrieveImageTask(userpicture);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,6 +126,63 @@ public class ProfilesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public Bitmap getPhotoFacebook(final String id) {
+
+        Bitmap bitmap = null;
+        final String nomimg = "https://graph.facebook.com/" + id + "/picture?type=large";
+        URL imageURL = null;
+
+        try {
+            imageURL = new URL(nomimg);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            //img_value.openConnection().setInstanceFollowRedirects(true).getInputStream()
+            bitmap = BitmapFactory.decodeStream(inputStream);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return bitmap;
+
+    }
+    private class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        private Exception exception;
+        private WeakReference<ImageView> imageViewReference;
+        private String data;
+
+        public RetrieveImageTask(ImageView userpicture) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(userpicture);
+        }
+
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            data = params[0];
+            return getPhotoFacebook(data);
+        }
+
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
     }
 
 }

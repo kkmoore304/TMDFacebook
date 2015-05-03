@@ -1,23 +1,30 @@
 package com.tellmedoctor.tmdfacebook.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+
 import com.tellmedoctor.tmdfacebook.R;
 import com.tellmedoctor.tmdfacebook.model.questionItem;
 import com.tellmedoctor.tmdfacebook.utils.LogUtils;
 import com.tellmedoctor.tmdfacebook.utils.PrefsUtils;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,10 +143,29 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         questionItem q = items.get(position);
 
 
-        //h.copyright.setText("Copyright Nipro and AshvinsGroup 2015");
+
         ((QuestionViewHolder) holder).question.setText(q.getPost_txt());
+        ((QuestionViewHolder) holder).specialty.setText(q.getContentTitle());
 
+// Display contact image
+        if (q.getImageUrl()!= null) {
+            File finalFile = new File(q.getImageUrl());
+            Bitmap bm = BitmapFactory.decodeFile(finalFile.getAbsolutePath());
+            ((QuestionViewHolder) holder).img
+                    .setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ((QuestionViewHolder) holder).img.setImageBitmap(Bitmap.createScaledBitmap(bm, 200, 150, false));
+            //	.createScaledBitmap(bm, 200, 150, false));
+        }
 
+       /* if (emerg.getImage() != null) {
+            File finalFile = new File(emerg.getImage());
+            Bitmap bm = BitmapFactory.decodeFile(finalFile
+                    .getAbsolutePath());
+            emergencyViewHolder.emergency_icon
+                    .setScaleType(ImageView.ScaleType.CENTER_CROP);
+            emergencyViewHolder.emergency_icon.setImageBitmap(Bitmap
+                    .createScaledBitmap(bm, 200, 150, false));
+        }*/
     }
 
     /**
@@ -184,12 +210,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // private TextView copyright;
         private TextView question;
         private LinearLayout row;
+        private ImageView img;
+        private TextView specialty;
 
 
         public QuestionViewHolder(View itemView) {
             super(itemView);
-
-
+            specialty = (TextView) itemView.findViewById(R.id.specialty);
+            img = (ImageView) itemView.findViewById(R.id.questionicon);
             row = (LinearLayout) itemView.findViewById(R.id.row);
             //  copyright = (TextView) itemView.findViewById(R.id.release_info);
             question = (TextView) itemView.findViewById(R.id.question);
@@ -203,7 +231,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, getPosition());
+                try {
+                    mItemClickListener.onItemClick(v, getPosition());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -215,7 +247,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public interface OnQuestionItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position) throws URISyntaxException;
     }
 
     public void SetOnQuestionItemClickListener(OnQuestionItemClickListener mItemClickListener) {

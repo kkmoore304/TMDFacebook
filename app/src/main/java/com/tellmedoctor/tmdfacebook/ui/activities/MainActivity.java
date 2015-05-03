@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+
+import com.facebook.FacebookSdk;
 import com.tellmedoctor.tmdfacebook.R;
 import com.tellmedoctor.tmdfacebook.ui.fragments.AnswersFragment;
 import com.tellmedoctor.tmdfacebook.ui.fragments.AskAQuestionFragment;
@@ -72,7 +74,7 @@ public class MainActivity extends BaseActivity implements
         inflater = getLayoutInflater();
         _context = getApplicationContext();
 
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         String action_utilities = "tbd";
         String delete_all_data = "tbd";
         String back_and_rest = "tbd";

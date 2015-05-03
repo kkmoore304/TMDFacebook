@@ -26,18 +26,20 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="35dp"
                 android:textColor="@color/primary_text_icons"
-                android:text="JOHN " />
+                android:text="Kevin " />
 
             <TextView
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="25dp"
                 android:textColor="@color/primary_text_icons"
-                android:text="BROWN " />
+                android:text="Moore " />
         </LinearLayout>
 
     </LinearLayout>

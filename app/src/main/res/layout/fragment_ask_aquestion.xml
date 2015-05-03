@@ -65,30 +65,63 @@
                 android:hint="Specialty" />
         </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/row3"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:gravity="center_vertical"
+        <LinearLayout
+            android:id="@+id/row3"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:textSize="18sp"
-            android:text="Question"
-            android:id="@+id/qwert2" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textSize="18sp"
+                android:text="Question"
+                android:id="@+id/qwert2" />
 
 
-        <EditText
-            android:id="@+id/newquestion"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            <EditText
+                android:id="@+id/newquestion"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your question here"
+                android:maxLines="10" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:id="@+id/row4"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Enter your question here"
-            android:maxLines="10"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textSize="18sp"
+                android:text="Click to Add Image will help to explain you problem"
+                android:id="@+id/addimage" />
+
+
+            <Button
+                android:id="@+id/btnaddimage"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Add an Image"
+                android:maxLines="10" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/questionImage"/>
         </LinearLayout>
     </LinearLayout>
 

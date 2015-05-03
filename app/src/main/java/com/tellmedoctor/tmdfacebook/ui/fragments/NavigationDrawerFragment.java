@@ -3,7 +3,11 @@ package com.tellmedoctor.tmdfacebook.ui.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -11,12 +15,29 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.tellmedoctor.tmdfacebook.R;
 import com.tellmedoctor.tmdfacebook.adapters.NavArrayAdapter;
 import com.tellmedoctor.tmdfacebook.model.NavMenuItem;
 import com.tellmedoctor.tmdfacebook.model.NavMenuSection;
+import com.tellmedoctor.tmdfacebook.model.profile;
+import com.tellmedoctor.tmdfacebook.ui.activities.MainActivity;
 import com.tellmedoctor.tmdfacebook.ui.views.NavDrawerItem;
 import com.tellmedoctor.tmdfacebook.utils.PrefsUtils;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,9 +45,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -45,6 +82,8 @@ public class NavigationDrawerFragment extends Fragment {
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
+    private static AccessToken tokenz;
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -65,9 +104,15 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private Context context;
     private String[] mNavTitles;
+    private CallbackManager callbackManager;
 
     ArrayList<NavDrawerItem> items = new ArrayList<NavDrawerItem>();
+    private View rootView;
+    private LoginButton loginButton;
 
+    List<String> permissionNeeds = Arrays.asList("user_photos", "friends_photos", "email", "user_birthday", "user_friends");
+    private AccessTokenTracker accessTokenTracker;
+    private String token;
 
     public NavigationDrawerFragment() {
     }
@@ -106,10 +151,10 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         context = getActivity();
-
-
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+        FacebookSdk.sdkInitialize(context);
+        rootView = inflater.inflate(R.layout.fragment_navigation_drawer,
+                container, false);
+        mDrawerListView = (ListView) rootView.findViewById(R.id.navlist);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,6 +162,81 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
+        final TextView name = (TextView) rootView.findViewById(R.id.name);
+        final TextView email = (TextView) rootView.findViewById(R.id.email);
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut();//logInWithReadPermissions(getActivity(), permissionNeeds);
+
+                PrefsUtils.setFBAuth(getActivity(), false);
+                Intent MainIntent = new Intent(getActivity(), MainActivity.class);
+                //String keyIdentifier_data_entry = "EulaActivity";
+                //EulaIntent.putExtra("fragment", keyIdentifier_data_entry);
+                startActivity(MainIntent);
+            }
+        });
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                // App code
+            }
+        };
+        AccessToken newString;
+        if (savedInstanceState == null) {
+            Bundle extras = getActivity().getIntent().getExtras();
+            if (extras == null) {
+                token = null;
+            } else {
+                token = (String) extras.get("token");
+            }
+        } else {
+            newString = null;//(AccessToken) savedInstanceState.getSerializable("token");
+        }
+
+        if (PrefsUtils.getAccessToken(getActivity()) != null &&
+                PrefsUtils.getAccessTokenDate(getActivity()) != 0) {
+
+            // Create a DateFormatter object for displaying date in specified format.
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy");
+            String date = formatter.format(PrefsUtils.getAccessTokenDate(getActivity()));
+            tokenz = AccessToken.getCurrentAccessToken();
+        }
+        final profile fbUser = new profile();
+        GraphRequest request = GraphRequest.newMeRequest(
+                tokenz,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject user,
+                            GraphResponse response) {
+                        if (user != null) {
+                            fbUser.setEmail(user.optString("email"));
+                            fbUser.setFirstname(user.optString("name"));
+                            fbUser.setId(user.optString("id"));
+                            if (name != null)
+                                name.setText(user.optString("name"));
+                            if (email != null)
+                                email.setText(user.optString("email"));
+                            ImageView userpicture = (ImageView) rootView.findViewById(R.id.image);
+                            RetrieveImageTask task = new RetrieveImageTask(userpicture);
+                            task.execute(user.optString("id"));
+
+                        }
+                    }
+                });
+
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link");
+        request.setParameters(parameters);
+        request.executeAsync();
 
         items.add(new NavMenuItem(0, getString(R.string.questions), "ic_questions", true, getActivity(), 0));
         items.add(new NavMenuItem(1, getString(R.string.answers), "ic_answer", true, getActivity(), 0));
@@ -132,8 +252,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return rootView;//mDrawerListView;
     }
+
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -360,5 +481,62 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
     }
 
+    public Bitmap getPhotoFacebook(final String id) {
 
+        Bitmap bitmap = null;
+        final String nomimg = "https://graph.facebook.com/" + id + "/picture?type=large";
+        URL imageURL = null;
+
+        try {
+            imageURL = new URL(nomimg);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            //img_value.openConnection().setInstanceFollowRedirects(true).getInputStream()
+            bitmap = BitmapFactory.decodeStream(inputStream);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return bitmap;
+
+    }
+
+
+    private class RetrieveImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        private Exception exception;
+        private WeakReference<ImageView> imageViewReference;
+        private String data;
+
+        public RetrieveImageTask(ImageView userpicture) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(userpicture);
+        }
+
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            data = params[0];
+            return getPhotoFacebook(data);
+        }
+
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
 }

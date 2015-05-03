@@ -17,12 +17,23 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!PrefsUtils.getEulaAccepted(this)) {
+        if (!PrefsUtils.getEulaAccepted(this) || !PrefsUtils.getFBAuth(this)) {
             // onNavigationDrawerItemSelected(EULA);
-            Intent EulaIntent = new Intent(this, WelcomeActivity.class);
-            //String keyIdentifier_data_entry = "EulaActivity";
-            //EulaIntent.putExtra("fragment", keyIdentifier_data_entry);
-            startActivity(EulaIntent);
+
+            if(!PrefsUtils.getEulaAccepted(this)) {
+                Intent EulaIntent = new Intent(this, WelcomeActivity.class);
+                //String keyIdentifier_data_entry = "EulaActivity";
+                //EulaIntent.putExtra("fragment", keyIdentifier_data_entry);
+                startActivity(EulaIntent);
+            }else
+
+            if(!PrefsUtils.getFBAuth(this)){
+                Intent FBIntent = new Intent(this, LoginActivity.class);
+                //String keyIdentifier_data_entry = "EulaActivity";
+                //EulaIntent.putExtra("fragment", keyIdentifier_data_entry);
+                startActivity(FBIntent);
+            }
+
             finish();
         }
     }

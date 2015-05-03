@@ -5,23 +5,33 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.facebook.messenger.MessengerUtils;
+import com.facebook.messenger.ShareToMessengerParams;
 import com.tellmedoctor.tmdfacebook.R;
 import com.tellmedoctor.tmdfacebook.adapters.QuestionAdapter;
 import com.tellmedoctor.tmdfacebook.model.questionItem;
 import com.tellmedoctor.tmdfacebook.ui.activities.MainActivity;
+import com.tellmedoctor.tmdfacebook.utils.ImageUtils;
 import com.tellmedoctor.tmdfacebook.utils.PrefsUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 
@@ -38,6 +48,7 @@ public class QuestionFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_CODE_SHARE_TO_MESSENGER = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,6 +62,7 @@ public class QuestionFragment extends Fragment {
     private int currPosition;
     private QuestionAdapter adapter;
     private ImageButton fab_question;
+    private Uri tempUri;
 
     /**
      * Use this factory method to create a new instance of
@@ -87,11 +99,8 @@ public class QuestionFragment extends Fragment {
         if (PrefsUtils.getQuestions(_context) == null) {
 
             //initialize
-            questionItem[] targetRangeItem = new questionItem[]{
-                    new questionItem("1", "Question one ", "1"),
-                    new questionItem("2", "Question two ", "70"),
-                    new questionItem("3", "Question threee ring", "3"),
-                    new questionItem("4", "Quesion four", "6")
+          /*  questionItem[] targetRangeItem = new questionItem[]{
+                    new questionItem("1", "Question one ", "1")
             };
 
             // was there a previously save target range set?
@@ -101,7 +110,7 @@ public class QuestionFragment extends Fragment {
                 Gson gson = new Gson();
                 String json = gson.toJson(targetRangeItem);
                 PrefsUtils.setQuestions(_context, json);
-            }
+            }*/
 
         }
     }
@@ -166,11 +175,31 @@ public class QuestionFragment extends Fragment {
 
         adapter.SetOnQuestionItemClickListener(new QuestionAdapter.OnQuestionItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, int position) throws URISyntaxException {
                 currPosition = position;
-
+                questionItem val = questions_list.get(position);
                 // capture the id of the row selected
                 long dataEntryId = adapter.getItemId(position);
+
+                   String mimeType = "image/jpeg";
+
+               // contentUri points to the content being shared to Messenger
+                if (val.getImageUrl()!= null) {
+                    File finalFile = new File(val.getImageUrl());
+                    Bitmap bm = BitmapFactory.decodeFile(finalFile.getAbsolutePath());
+
+                    tempUri= ImageUtils.getImageUri(_context, bm);
+
+                }
+                ShareToMessengerParams shareToMessengerParams =
+                        ShareToMessengerParams.newBuilder(tempUri, mimeType)
+                                .build();
+
+                // Sharing from an Activity
+                MessengerUtils.shareToMessenger(
+                        _context,
+                        REQUEST_CODE_SHARE_TO_MESSENGER,
+                        shareToMessengerParams);
 
                 /*Intent dataEntryIntent = new Intent(getActivity(), ReportsActivity.class);
                 String keyIdentifier_data_entry = "dataEntryFragment";
